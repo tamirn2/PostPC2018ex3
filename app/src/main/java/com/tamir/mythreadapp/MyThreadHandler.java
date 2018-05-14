@@ -1,5 +1,8 @@
 package com.tamir.mythreadapp;
 
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.widget.TextView;
 
@@ -7,14 +10,14 @@ import java.lang.ref.WeakReference;
 
 import static java.lang.Thread.sleep;
 
-public class MyThreadHandler implements Runnable {
+public class MyThreadHandler extends HandlerThread
+{
 
-    private WeakReference<TextView> mTextView;
+    private WeakReference<Handler> handler;
 
-    protected MyThreadHandler(TextView textView)
-    {
-        super();
-        this.mTextView = new WeakReference<>(textView);
+    public MyThreadHandler(String name, Handler handler) {
+        super(name);
+        this.handler = new WeakReference<>(handler);
     }
 
     @Override
@@ -31,29 +34,8 @@ public class MyThreadHandler implements Runnable {
             e.printStackTrace();
         }
         Long endTime = SystemClock.elapsedRealtime() - time;
-        this.mTextView.get().setText(endTime.toString());
-//        MainActivity.this.onResult();
+
+        this.handler.get().sendEmptyMessage(0);
     }
 
-//    public MyThreadHandler(String name, TextView textView)
-//    {
-//        super(name);
-//        this.textView = textView;
-//    }
-//
-//    @Override
-//    public void run() {
-//        Long time = SystemClock.elapsedRealtime();
-//        for (int i = 0; i < 10; i++)
-//        {
-//
-//        }
-//        try {
-//            sleep(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        Long endTime = SystemClock.elapsedRealtime() - time;
-//        this.textView.setText(endTime.toString());
-//    }
 }
