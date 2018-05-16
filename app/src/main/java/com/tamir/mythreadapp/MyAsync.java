@@ -5,8 +5,13 @@ import android.os.AsyncTask;
 
 import static java.lang.Thread.sleep;
 
-public class MyAsync extends AsyncTask<AsyncActivity, Integer, Integer> {
+public class MyAsync extends AsyncTask<Void, Integer, Integer> {
     AsyncActivity rootActivity;
+
+    protected MyAsync(AsyncActivity rootActivity)
+    {
+        this.rootActivity = rootActivity;
+    }
 
     @Override
     protected void onProgressUpdate(Integer... values) {
@@ -15,12 +20,11 @@ public class MyAsync extends AsyncTask<AsyncActivity, Integer, Integer> {
     }
 
     @Override
-    protected Integer doInBackground(AsyncActivity... asyncActivities) {
-        rootActivity = asyncActivities[0];
+    protected Integer doInBackground(Void... voids) {
 
         for (Integer i = 1; i < 11; i++)
         {
-            if(isCancelled())
+            if (isCancelled())
             {
                 return 0;
             }
@@ -33,6 +37,12 @@ public class MyAsync extends AsyncTask<AsyncActivity, Integer, Integer> {
 
         }
         return -1;
+    }
+
+    @Override
+    protected void onCancelled(Integer integer) {
+        super.onCancelled(integer);
+        rootActivity.updateMainText(integer);
     }
 
     @Override

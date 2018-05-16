@@ -8,19 +8,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+
 public class AsyncActivity extends AppCompatActivity {
 
     private TextView mainTextView;
+    private LinkedList<MyAsync> myAsyncTasks;
+
 
     protected void updateMainText(Integer progress)
     {
         if (progress == -1)
         {
             mainTextView.setText("Done!");
+            myAsyncTasks.removeFirst();
         }
         else if (progress == 0)
         {
             mainTextView.setText("Cancelled!");
+            myAsyncTasks.removeFirst();
         }
         else
         {
@@ -38,16 +46,13 @@ public class AsyncActivity extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.activity_thread_cancel_button);
         mainTextView = findViewById(R.id.activity_thread_main_text_view);
         final Activity activityContext = this;
-
-        final MyAsync[] myAsync = new MyAsync[1];
+        myAsyncTasks = new LinkedList<>();
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                if (myAsync[0] == null) {
-                    myAsync[0] = new MyAsync();
-                }
+                myAsyncTasks.add(new MyAsync((AsyncActivity) activityContext));
             }
         });
 
@@ -55,10 +60,12 @@ public class AsyncActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                if (myAsync[0] != null)
+                if (myAsyncTasks.size() > 0)
                 {
-                    myAsync[0].execute((AsyncActivity) activityContext);
-                } else {
+                    myAsyncTasks.getFirst().execute();
+                }
+                else
+                {
                     Snackbar.make(view, "No Thread created", 500).show();
                 }
 
@@ -69,7 +76,7 @@ public class AsyncActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                myAsync[0].cancel(true);
+                myAsyncTasks.getFirst().cancel(true);
             }
         });
 
