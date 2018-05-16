@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -48,6 +49,7 @@ public class AsyncActivity extends AppCompatActivity {
         final Activity activityContext = this;
         myAsyncTasks = new LinkedList<>();
 
+
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -60,9 +62,10 @@ public class AsyncActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                if (myAsyncTasks.size() > 0)
+                if (!myAsyncTasks.isEmpty())
                 {
-                    myAsyncTasks.getFirst().execute();
+                    MyAsync curTask = myAsyncTasks.getFirst();
+                    curTask.execute();
                 }
                 else
                 {
