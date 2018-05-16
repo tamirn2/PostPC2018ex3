@@ -18,7 +18,7 @@ public class HandlerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thread);
 
-        Button createButton = findViewById(R.id.activity_thread_create_button);
+        final Button createButton = findViewById(R.id.activity_thread_create_button);
         Button startButton = findViewById(R.id.activity_thread_start_button);
         Button cancelButton = findViewById(R.id.activity_thread_cancel_button);
         final TextView mainTextView = findViewById(R.id.activity_thread_main_text_view);
@@ -55,6 +55,7 @@ public class HandlerActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (thread[0] == null) {
                     thread[0] = new MyHandlerThread(mainHandler);
+                    createButton.setEnabled(false);
                 }
             }
         });
